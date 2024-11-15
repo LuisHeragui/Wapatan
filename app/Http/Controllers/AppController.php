@@ -13,7 +13,6 @@ class AppController extends Controller
     public function index(): Response
     {
         return Inertia::render('Wapatan', [
-            'phpVersion' => PHP_VERSION,
             'products' => Product::all(),
             'ingredients' => Ingredient::all(),
         ]);
