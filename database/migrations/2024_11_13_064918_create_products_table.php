@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('svg');
+            $table->decimal('price', 9, 2);
             $table->timestamps();
         });
     }
