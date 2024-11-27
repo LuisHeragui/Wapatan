@@ -10,6 +10,7 @@ use Inertia\Response;
 
 class AppController extends Controller
 {
+    // Función encargada de renderizar la vista de la app con los datos necesarios.
     public function index(): Response
     {
         return Inertia::render('Wapatan', [

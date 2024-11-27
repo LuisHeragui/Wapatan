@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Ruta principal.
 Route::get('/', [AppController::class, 'index'])->name('home');
 
 Route::get('/admin', function () {

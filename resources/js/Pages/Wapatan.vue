@@ -1,14 +1,21 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import PreviousMap from 'postcss/lib/previous-map';
+import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue'
 
+// Definición de variables.
+
+// Variable para saber si se ha selccionado un producto.
 const productSelected = ref(false);
+// Variable para saber si debemos mostrar la modal.
 const showModal = ref(false);
+// Variable para saber si debemos mostrar el ticket.
 const showTicket = ref(false);
+// Variable para almacenar los Wapatan seleccionados.
 const currentWaps = ref([]);
+// Variable para almacenar el precio total.
 const total = ref(0);
 
+// Definición de los elementos recibidos desde el back.
 const props = defineProps({
     products: {
         type: Array,
@@ -20,6 +27,7 @@ const props = defineProps({
     },
 });
 
+// Función encargada de agregar el Wapatan seleccionado a la lista.
 function addProduct(product) {
     productSelected.value = true;
     currentWaps.value.push({
@@ -29,17 +37,21 @@ function addProduct(product) {
     });
 }
 
+// Función encargada de habilitar la modal y mostrar el precio total.
 function checkOrder() {
     showModal.value = true;
     total.value = currentWaps.value.reduce((accumulator, current) => accumulator + parseFloat(current.total), 0).toFixed(2);
 }
 
+// Función encargada de realizar la orden.
+// TODO: Hacer petición al back para almacenar cada Wapatan en la base de datos.
 function makeOrder() {
     showModal.value = false;
     showTicket.value = true;
     console.log('order', currentWaps.value);
 }
 
+// Función encargada de eliminar el Wapatan seleccionado.
 function removeWap(index) {
     currentWaps.value.splice(index, 1);
     if (!currentWaps.value.length) {
@@ -47,12 +59,14 @@ function removeWap(index) {
     }
 }
 
+// Función encargada de resetear todas las variables al estado inicial.
 function restart() {
     productSelected.value = false;
     showTicket.value = false;
     currentWaps.value = [];
 }
 
+// Función encargada de actualizar el valor del total.
 function updateTotal(index) {
     let total = 0;
     currentWaps.value[index].ingredients.forEach(ing => {
@@ -76,6 +90,7 @@ function updateTotal(index) {
                 </header>
 
                 <main>
+                    <!-- Sección principal -->
                     <div v-if="!productSelected" class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                         <div class="flex items-start gap-4 justify-center rounded-lg p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring ring-white ring-inset ring-offset-2 bg-[#E6D0BE] hover:bg-[#DDBFA7] hover:cursor-pointer"
                             v-for="product in products" :key="product.id" @click="addProduct(product)">
@@ -96,7 +111,9 @@ function updateTotal(index) {
                         </div>
                     </div>
 
+                    <!-- Sección para agregar ingredientes y más Wapatan's -->
                     <div v-else>
+                        <!-- Muestra del ticket -->
                         <div v-if="showTicket">
                             <h2 class="text-3xl font-semibold text-white text-center mb-2">
                                 Resumen de tu pedido
@@ -137,6 +154,7 @@ function updateTotal(index) {
                             </div>
                         </div>
 
+                        <!-- Selección de ingredientes -->
                         <div v-else class="text-center">
                             <div class="container mx-auto flex gap-4 overflow-x-auto p-4">
                                 <div v-for="(wapatan, key) in currentWaps" :key="key"
@@ -201,6 +219,7 @@ function updateTotal(index) {
             </div>
         </div>
 
+        <!-- Contenido de la modal -->
         <div v-if="showModal" class="absolute flex w-full h-full top-0 right-0 bg-black/50">
             <div class="m-auto bg-emerald-50 p-5 rounded-lg w-1/3 max-h-[500px]">
                 <h2 class="font-bold text-xl mb-5 text-center">Confirma tu pedido</h2>
